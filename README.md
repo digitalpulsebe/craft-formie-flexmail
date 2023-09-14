@@ -45,6 +45,8 @@ To install the plugin, follow these instructions.
    - Dropdown fields must have options available in Flexmail, you have to manually check them
    - Date fields don't support time
 
+## Screenshot
 
+![Screenshot](resources/img/src01.png)
 
 
