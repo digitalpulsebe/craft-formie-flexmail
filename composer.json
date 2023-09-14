@@ -1,0 +1,48 @@
+{
+    "name": "digitalpulsebe/craft-formie-flexmail",
+    "description": "Flexmail integration for Formie",
+    "type": "craft-plugin",
+    "license": "mit",
+    "support": {
+        "email": "support@digitalpulse.be",
+        "issues": "https://github.com/digitalpulsebe/craft-formie-flexmail/issues?state=open",
+        "source": "https://github.com/digitalpulsebe/craft-formie-flexmail",
+        "docs": "https://github.com/digitalpulsebe/craft-formie-flexmail",
+        "rss": "https://github.com/digitalpulsebe/craft-formie-flexmail/releases.atom"
+    },
+    "require": {
+        "php": ">=8.0.2",
+        "craftcms/cms": "^4.3.5",
+        "verbb/formie": "^2.0"
+    },
+    "require-dev": {
+        "craftcms/ecs": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "digitalpulsebe\\formieflexmail\\": "src/"
+        }
+    },
+    "extra": {
+        "handle": "formie-flexmail",
+        "name": "Flexmail for Formie",
+        "developer": "Digital Pulse nv",
+        "documentationUrl": "https://github.com/digitalpulsebe/craft-formie-flexmail",
+        "class": "digitalpulsebe\\formieflexmail\\FormieFlexmail"
+    },
+    "scripts": {
+        "check-cs": "ecs check --ansi",
+        "fix-cs": "ecs check --ansi --fix",
+        "phpstan": "phpstan --memory-limit=1G"
+    },
+    "config": {
+        "sort-packages": true,
+        "platform": {
+            "php": "8.0.2"
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
+    }
+}

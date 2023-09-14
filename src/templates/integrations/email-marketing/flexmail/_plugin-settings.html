@@ -1,0 +1,48 @@
+{% import '_includes/forms' as forms %}
+{% import 'verbb-base/_macros' as macros %}
+
+{% set instructions %}
+### Step 1. Connect to the {name} API
+1. Go to <a href="https://app.flexmail.eu/auth" target="_blank">Flexmail</a> and login to your account.
+1. Click on your profile dropdown on the top-right of the screen, and select **Settings**.
+1. In the section  **API** click **Personal access tokens**.
+1. Click the **Create token** button.
+1. Think of a name for this token, for example: "Website CMS integration"
+1. Copy the newly created key into the **API Token** field below.
+
+### Step 2. Test Connection
+1. Save this integration.
+1. Click on the **Refresh** button in the right-hand sidebar.
+{% endset %}
+
+<div class="fui-settings-block">
+    {{ instructions | t('formie', { name: integration.displayName() }) | md }}
+</div>
+
+{% if not craft.app.config.general.allowAdminChanges %}
+    <span class="warning with-icon">
+        {{ 'Integration settings can only be editable on an environment with `allowAdminChanges` enabled.' | t('formie') | md(inlineOnly=true) }}
+    </span>
+{% endif %}
+
+{{ forms.autosuggestField({
+    label: 'User ID' | t('formie'),
+    instructions: 'Enter your {name} User ID / Customer Number (D-000000).' | t('formie', { name: integration.displayName() }),
+    name: 'apiUsername',
+    required: true,
+    suggestEnvVars: true,
+    value: integration.settings.apiUsername ?? '',
+    warning: macros.configWarning('apiUsername', 'formie'),
+    errors: integration.getErrors('apiUsername'),
+}) }}
+
+{{ forms.autosuggestField({
+    label: 'API Token' | t('formie'),
+    instructions: 'Enter your {name} API Token here.' | t('formie', { name: integration.displayName() }),
+    name: 'apiKey',
+    required: true,
+    suggestEnvVars: true,
+    value: integration.settings.apiKey ?? '',
+    warning: macros.configWarning('apiKey', 'formie'),
+    errors: integration.getErrors('apiKey'),
+}) }}
