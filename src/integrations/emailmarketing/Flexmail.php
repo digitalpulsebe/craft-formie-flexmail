@@ -313,6 +313,10 @@ class Flexmail extends EmailMarketing
             $data['custom_fields'][$key] = $value;
         }
 
+        if (count($data['custom_fields']) == 0) {
+            unset($data['custom_fields']);
+        }
+
         return $data;
     }
 
