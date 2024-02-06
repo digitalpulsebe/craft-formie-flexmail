@@ -1,5 +1,10 @@
 # Release Notes for Flexmail for Formie
 
+## 1.0.3 - 2024-02-06
+
+### Added
+- opt-in field in form settings
+
 ## 1.0.2 - 2023-12-14
 
 ### Fixed
