@@ -169,11 +169,15 @@ class Flexmail extends EmailMarketing
                 // update
                 $contactId = $existingContact['id'];
                 unset($payload['source']);
-                $this->deliverPayload($submission, "contacts/$contactId", $payload, 'PUT');
+                $response = $this->deliverPayload($submission, "contacts/$contactId", $payload, 'PUT');
             } else {
                 // create
                 $response = $this->deliverPayload($submission, "contacts", $payload, 'POST');
-                $contactId = $response['id'];
+                $contactId = $response['id'] ?? null;
+            }
+
+            if ($response === false) {
+                return true;
             }
 
             if ($newInterests) {
