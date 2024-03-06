@@ -1,5 +1,10 @@
 # Release Notes for Flexmail for Formie
 
+## 2.0.0 - 2024-03-06
+
+### Added
+- Craft 5 support
+
 ## 1.0.3 - 2024-02-06
 
 ### Added
