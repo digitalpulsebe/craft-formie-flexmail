@@ -4,8 +4,8 @@ Flexmail integration for Formie
 
 ## Requirements
 
-This plugin requires Craft CMS 4.3.5 or later, and PHP 8.0.2 or later.
-It also requires [Formie](https://github.com/verbb/formie) 2.0 or later, 
+This plugin requires Craft CMS >= 4.3.5 or Craft 5
+It also requires [Formie](https://github.com/verbb/formie) 2.0 or later (>3.0 for Craft 5), 
 this plugin adds a custom integration for Formie.
 
 You also need an account at [Flexmail](https://app.flexmail.eu/auth)
