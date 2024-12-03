@@ -5,6 +5,11 @@
 ### Added
 - Craft 5 support
 
+## 1.1.0 - 2024-12-03
+
+### Added
+- opt-in forms as destination
+
 ## 1.0.3 - 2024-02-06
 
 ### Added
