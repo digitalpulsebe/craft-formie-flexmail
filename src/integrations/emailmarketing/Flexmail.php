@@ -148,6 +148,15 @@ class Flexmail extends EmailMarketing
                     'fields' => $fields,
                 ]);
             }
+
+            $optInforms = $this->getPaginated('opt-in-forms');
+            foreach ($optInforms as $source) {
+                $settings['lists'][] = new IntegrationCollection([
+                    'id' => "opt_in_form-".$source['id'],
+                    'name' => $source['name'].' (opt-in)',
+                    'fields' => $fields,
+                ]);
+            }
         } catch (Throwable $e) {
             Integration::apiError($this, $e);
         }
@@ -159,30 +168,45 @@ class Flexmail extends EmailMarketing
     {
         try {
             $fieldValues = $this->getFieldMappingValues($submission, $this->fieldMapping);
-            $existingContact = $this->getExistingContact($fieldValues['email']);
 
             // map interests
             $newInterests = ArrayHelper::remove($fieldValues, 'interests');
             $payload = $this->mapContactData($fieldValues);
 
-            if ($existingContact) {
-                // update
-                $contactId = $existingContact['id'];
-                unset($payload['source']);
-                $response = $this->deliverPayload($submission, "contacts/$contactId", $payload, 'PUT');
-            } else {
+            $isOptInForm = isset($payload['opt_in_form_id']);
+
+            if ($isOptInForm) {
+                foreach ($payload['custom_fields'] as $key => $value) {
+                    if ($value == null) {
+                        // the opt-in endpoint does not like extra custom_fields, while the contacts endpoint wants every field
+                        unset($payload['custom_fields'][$key]);
+                    }
+                }
                 // create
-                $response = $this->deliverPayload($submission, "contacts", $payload, 'POST');
-                $contactId = $response['id'] ?? null;
+                $this->deliverPayload($submission, "opt-ins", $payload, 'POST');
+            } else {
+                $existingContact = $this->getExistingContact($fieldValues['email']);
+
+                if ($existingContact) {
+                    // update
+                    $contactId = $existingContact['id'];
+                    unset($payload['source']);
+                    $response = $this->deliverPayload($submission, "contacts/$contactId", $payload, 'PUT');
+                } else {
+                    // create
+                    $response = $this->deliverPayload($submission, "contacts", $payload, 'POST');
+                    $contactId = $response['id'] ?? null;
+                }
+
+                if ($response === false) {
+                    return true;
+                }
+
+                if ($newInterests) {
+                    $this->subscribeContactToInterests($contactId, $newInterests);
+                }
             }
 
-            if ($response === false) {
-                return true;
-            }
-
-            if ($newInterests) {
-                $this->subscribeContactToInterests($contactId, $newInterests);
-            }
         } catch (Throwable $e) {
             Integration::apiError($this, $e);
 
@@ -287,10 +311,20 @@ class Flexmail extends EmailMarketing
     }
 
     protected function mapContactData($fieldValues): array {
-        $data = [
-            'source' => intval($this->listId),
-            'custom_fields' => []
-        ];
+        $targetSource = $this->listId;
+
+        if (str_contains($targetSource, 'opt_in_form-')){
+            $optInFormId = str_replace('opt_in_form-', '', $targetSource);
+            $data = [
+                'opt_in_form_id' => intval($optInFormId)
+            ];
+        } else {
+            $data = [
+                'source' => intval($targetSource)
+            ];
+        }
+
+        $data['custom_fields'] = [];
 
         // default fields
         foreach (array_merge(array_keys($this->defaultFields), ['language']) as $key) {
