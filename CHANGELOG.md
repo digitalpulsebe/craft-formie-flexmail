@@ -1,5 +1,10 @@
 # Release Notes for Flexmail for Formie
 
+## 1.1.1 - 2024-12-4
+
+### Fixed
+- fixed error on empty custom_fields array when sending opt-in submissions
+
 ## 1.1.0 - 2024-12-03
 
 ### Added
