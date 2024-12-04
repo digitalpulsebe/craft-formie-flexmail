@@ -182,6 +182,9 @@ class Flexmail extends EmailMarketing
                         unset($payload['custom_fields'][$key]);
                     }
                 }
+                if (count($payload['custom_fields']) == 0) {
+                    unset($payload['custom_fields']);
+                }
                 // create
                 $this->deliverPayload($submission, "opt-ins", $payload, 'POST');
             } else {
