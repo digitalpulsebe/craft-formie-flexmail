@@ -366,7 +366,7 @@ class Flexmail extends EmailMarketing
         $contacts = $this->getPaginated('contacts', ['query'=>['email'=>$email]]);
 
         foreach ($contacts as $contact) {
-            if ($contact['email'] == $email) {
+            if (isset($contact['email']) && strcasecmp(trim($contact['email']), trim($email)) === 0) {
                 return $contact;
             }
         }
