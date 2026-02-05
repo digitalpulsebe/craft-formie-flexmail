@@ -1,5 +1,10 @@
 # Release Notes for Flexmail for Formie
 
+## 2.2.0 - 2026-02-05
+
+### Fixed
+- fix: case sensitive email comparison (thanks @robbeman)
+
 ## 2.1.1 - 2024-12-4
 
 ### Fixed
