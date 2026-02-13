@@ -370,7 +370,7 @@ class Flexmail extends EmailMarketing
 
     protected function getExistingContact(string $email): ?array
     {
-        $contacts = $this->getPaginated('contacts', ['query'=>['email'=>$email]]);
+        $contacts = $this->getPaginated('contacts', ['query'=>['email'=> trim(strtolower($email))]]);
 
         foreach ($contacts as $contact) {
             if (isset($contact['email']) && strcasecmp(trim($contact['email']), trim($email)) === 0) {
