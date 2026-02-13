@@ -332,7 +332,14 @@ class Flexmail extends EmailMarketing
         // default fields
         foreach (array_merge(array_keys($this->defaultFields), ['language']) as $key) {
             $value = ArrayHelper::remove($fieldValues, $key);
-            $data[$key] = $value ?? '';
+            if ($key === 'email') {
+                // POST or PUT /contacts seems to dislike email addresses with uppercase characters
+                // results in "400 Bad request" with "Input validation failed"
+                $data[$key] = trim(strtolower($value ?? ''));
+            }
+            else {
+                $data[$key] = $value ?? '';
+            }
         }
 
         // custom fields
@@ -363,7 +370,7 @@ class Flexmail extends EmailMarketing
 
     protected function getExistingContact(string $email): ?array
     {
-        $contacts = $this->getPaginated('contacts', ['query'=>['email'=>$email]]);
+        $contacts = $this->getPaginated('contacts', ['query'=>['email'=> trim(strtolower($email))]]);
 
         foreach ($contacts as $contact) {
             if (isset($contact['email']) && strcasecmp(trim($contact['email']), trim($email)) === 0) {
